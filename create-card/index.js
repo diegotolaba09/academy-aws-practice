@@ -12,8 +12,9 @@ const dynamodb = new DYNAMODB({ region: "us-east-1" });
 
 exports.handler = async (event) => {
   try {
-    const dni = validationDni(event);
-
+    const data = JSON.parse(event.Records[0].body);
+    const body = JSON.parse(data.Message);
+    const dni = validationDni(body);
     const params = getParams(dni);
     const client = await dynamodb.getItem(params).promise();
 
@@ -28,14 +29,14 @@ exports.handler = async (event) => {
       cardType = "Gold";
     }
 
-    const data = {
+    const dataClient = {
       ...client.Item,
       cardType: { S: cardType },
       expiration: { S: getExpiration() },
       code: { N: `${generateCode()}` },
     };
 
-    const formatData = getFormatData(data);
+    const formatData = getFormatData(dataClient);
 
     await dynamodb.updateItem(formatData).promise();
 
