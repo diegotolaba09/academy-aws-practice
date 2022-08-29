@@ -10,9 +10,13 @@ const dynamodb = new DYNAMODB({ region: "us-east-1" });
 
 exports.handler = async (event) => {
   try {
+<<<<<<< HEAD
     const data = JSON.parse(event.Records[0].body);
     const body = JSON.parse(data.Message);
     const dni = validationDni(body);
+=======
+    const dni = validationDni(event);
+>>>>>>> main
     const params = getParams(dni);
     const client = await dynamodb.getItem(params).promise();
 

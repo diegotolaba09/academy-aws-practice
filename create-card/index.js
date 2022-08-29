@@ -15,7 +15,6 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.Records[0].body);
     const body = JSON.parse(data.Message);
     const dni = validationDni(body);
-
     const params = getParams(dni);
     const client = await dynamodb.getItem(params).promise();
 

@@ -12,6 +12,7 @@ exports.handler = async (event) => {
     const data = validationData(event);
     const params = getParams(data);
     await dynamodb.putItem(params).promise();
+
     await sns
       .publish({
         Message: JSON.stringify(event),
